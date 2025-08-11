@@ -11,12 +11,10 @@ from rest_framework import status
 from django.db.models import Sum
 from django.utils.timezone import datetime #important if using timezones
 
+from .utils import start_and_end_of_month, start_and_end_of_year
 
-from .utils import start_and_end_of_month
-# Create your views here.
 
 # class IncomeV
-
 class IncomeViewSet(viewsets.ModelViewSet):
     page_size = 10
     queryset = Income.objects.all()
@@ -66,6 +64,7 @@ class BudgetViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
@@ -74,6 +73,31 @@ class BudgetViewSet(viewsets.ModelViewSet):
         budgets = self.get_queryset()
         serializer = BudgetSerializer(budgets, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    @action(detail=True, methods=['get'], url_path='this-months-budget')
+    def this_months_budget(self, request,pk=None):
+        start_date, end_date = start_and_end_of_month()
+        try:
+            budget = self.queryset.filter(user=self.request.user, start_date=start_date, end_date=end_date).first()
+            print(budget)
+            serializer = BudgetSerializer(budget)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Budget.DoesNotExist:
+            return Response({"detail": "Budget for this month does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+    @action(detail=True, methods=['get'], url_path='this-years-budget')
+    def this_years_budget(self, request, pk=None):
+        start_date, end_date = start_and_end_of_year()
+        try:
+            budget = self.queryset.filter(user=self.request.user, start_date=start_date, end_date=end_date).first()
+            serializer = BudgetSerializer(budget)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Budget.DoesNotExist:
+            return Response({"detail": "Budget for this year does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 
@@ -99,3 +123,5 @@ def this_month_income_expensez_view(request):
     except AttributeError:
         budget = 0
     return Response({"incomes":incomes, "expenses":expenses, 'total_income': total_income, "total_expense": total_expense,"budget": budget}, status=status.HTTP_200_OK)
+
+

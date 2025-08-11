@@ -40,3 +40,15 @@ def get_monthly_income_expenses(user):
         'start_date': start_of_month,
         'end_date': end_of_month
     }
+
+def start_and_end_of_year():
+    """
+    Returns the start and end dates of the current year.
+    The start date is set to January 1st at 00:00:00.
+    The end date is set to December 31st at 23:59:59.
+    """
+    today = datetime.now()
+    start_of_year = today.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+    end_of_year = today.replace(month=12, day=31, hour=23, minute=59, second=59, microsecond=999999)
+
+    return start_of_year, end_of_year   
