@@ -35,6 +35,10 @@ const IncomeExpenseChart = ({apiData}) => {
 //   };
     console.log("API Data: expenses", apiData.expenses);
     console.log("API Data: incomes", apiData.incomes);
+
+  if (!apiData || !apiData.expenses || !apiData.incomes) {
+    return <div>first You have to set your bugdet and add income and expense data!</div>;
+  }
   const allDates = Array.from(
     new Set([...apiData.expenses.map(e => e.date), ...apiData.incomes.map(i => i.date)])
   ).sort();
