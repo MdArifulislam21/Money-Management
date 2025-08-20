@@ -1,4 +1,6 @@
 import React from 'react'
+import PlansComponent from './Budgetplan';
+
 
 const HomePage = () => {
   return (
@@ -8,6 +10,7 @@ const HomePage = () => {
 
       <h1 className='grid-1 box-sm bg-green-800 py-4  opacity-85 px-10 text-white'> Acheive Target!</h1>
     </div>
+      < PlansComponent />
     </div>
   )
 }
