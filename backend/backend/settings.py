@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']  # Allow all hosts for development; restrict in production
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", 
     "http://localhost:5173",
+    "http://localhost:5173"
     ]
 
 
@@ -109,8 +110,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,  # Number of items per page,
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Example: 1 hour
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Example: 1 hour
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
 }
 
 # Password validation
